@@ -144,3 +144,17 @@ footer {
     opacity: 0.85;
   }
 }
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #2e7d32;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 6px;
+}
+
+#cari {
+  margin-bottom: 12px;
+}
