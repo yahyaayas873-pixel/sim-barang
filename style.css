@@ -1,0 +1,146 @@
+/* ===== Reset & Box Model ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  background-color: #f4f6f8;
+  color: #222;
+}
+
+/* ===== Header & Nav (Flexbox) ===== */
+header {
+  background-color: #1f4e79;
+  color: #fff;
+  padding: 16px;
+  text-align: center;
+}
+
+nav {
+  background-color: #163a5a;
+  padding: 8px 16px;
+}
+
+nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 6px 12px;
+  display: block;
+}
+
+/* ===== Konten ===== */
+main {
+  padding: 16px;
+}
+
+section {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+h2 {
+  margin-bottom: 12px;
+}
+
+/* ===== Tabel ===== */
+.tabel-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #e8eef4;
+}
+
+/* ===== Form (Grid) ===== */
+fieldset {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  border: 1px solid #ccc;
+  padding: 16px;
+}
+fieldset div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+input, select, button {
+  padding: 8px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+button {
+  margin-top: 12px;
+  background-color: #1f4e79;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  padding: 16px;
+  background-color: #163a5a;
+  color: #fff;
+}
+
+/* ===== Tablet: 600px - 1024px ===== */
+@media (min-width: 600px) {
+  nav ul {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  fieldset {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  main {
+    padding: 24px;
+  }
+}
+
+/* ===== Desktop: > 1024px ===== */
+@media (min-width: 1025px) {
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  fieldset {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  nav a:hover,
+  button:hover {
+    opacity: 0.85;
+  }
+}
