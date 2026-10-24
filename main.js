@@ -25,9 +25,7 @@ form.addEventListener("submit", function (e) {
     return;
   }
 
-  // Jika semua valid, tampilkan toast dan cegah reload halaman sementara
-  e.preventDefault();
-  tampilToast("Data berhasil divalidasi");
+  // Jika semua valid, biarkan form submit secara normal ke PHP (jangan di-preventDefault)
 });
 
 // ===== 2. Filter tabel real-time =====
