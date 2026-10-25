@@ -6,21 +6,19 @@ if (!isset($_SESSION['user'])) {
     header('Location: login.php');
     exit;
 }
-?>
 
-<?php
 include 'koneksi.php';
 
 // Proses simpan data saat form disubmit
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $kode     = $_POST['kode'];
     $nama     = $_POST['nama'];
-    $kategori = $_POST['kategori'];
+    $kategori = $_POST['kategori']; // Mengambil id_kategori dari select option
     $jumlah   = $_POST['jumlah'];
     $harga    = $_POST['harga'];
     $kondisi  = $_POST['kondisi'];
 
-    $query_insert = "INSERT INTO barang (kode_barang, nama_barang, kategori, jumlah, harga_satuan, kondisi) 
+    $query_insert = "INSERT INTO barang (kode_barang, nama_barang, id_kategori, jumlah, harga_satuan, kondisi) 
                      VALUES ('$kode', '$nama', '$kategori', '$jumlah', '$harga', '$kondisi')";
 
     if (mysqli_query($koneksi, $query_insert)) {
@@ -34,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIM-Barang - Inventaris Jurusan</title>
@@ -43,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
   <header>
     <div style="text-align: right; margin-bottom: 20px;">
-    <span>Halo, <b><?= $_SESSION['user'] ?></b></span> | 
-    <a href="logout.php" style="color: red; text-decoration: none; font-weight: bold;">Logout</a>
-</div>
+      <span>Halo, <b><?= htmlspecialchars($_SESSION['user']) ?></b></span> | 
+      <a href="logout.php" style="color: red; text-decoration: none; font-weight: bold;">Logout</a>
+    </div>
     <h1>SIM-Barang</h1>
     <p>Sistem Pengelolaan Inventaris Barang Jurusan</p>
   </header>
@@ -76,22 +73,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </tr>
           </thead>
           <tbody>
-    <?php
-    $query = mysqli_query($koneksi, "SELECT * FROM barang");
-    while ($row = mysqli_fetch_assoc($query)) {
-        // Perhitungan nilai aset sesuai instruksi Pertemuan 5 (Jumlah * Harga Satuan)
-        $total_aset = $row['jumlah'] * $row['harga_satuan'];
-    ?>
-    <tr>
-        <td><?php echo htmlspecialchars($row['kode_barang']); ?></td>
-        <td><?php echo htmlspecialchars($row['nama_barang']); ?></td>
-        <td><?php echo htmlspecialchars($row['kategori']); ?></td>
-        <td><?php echo htmlspecialchars($row['jumlah']); ?></td>
-        <td>Rp <?php echo number_format($row['harga_satuan'], 0, ',', '.'); ?></td>
-        <td><strong>Rp <?php echo number_format($total_aset, 0, ',', '.'); ?></strong></td>
-        <td><?php echo htmlspecialchars($row['kondisi']); ?></td>
-    </tr>
-    <?php } ?>
+          <?php
+          // Mengambil data barang digabungkan dengan tabel kategori menggunakan LEFT JOIN
+          $query = mysqli_query($koneksi, "SELECT barang.*, kategori.nama_kategori FROM barang LEFT JOIN kategori ON barang.id_kategori = kategori.id_kategori");
+          while ($row = mysqli_fetch_assoc($query)) {
+              $total_aset = $row['jumlah'] * $row['harga_satuan'];
+          ?>
+          <tr>
+              <td><?php echo htmlspecialchars($row['kode_barang']); ?></td>
+              <td><?php echo htmlspecialchars($row['nama_barang']); ?></td>
+              <td><?php echo htmlspecialchars($row['nama_kategori'] ?? ''); ?></td>
+              <td><?php echo htmlspecialchars($row['jumlah']); ?></td>
+              <td>Rp <?php echo number_format($row['harga_satuan'], 0, ',', '.'); ?></td>
+              <td><strong>Rp <?php echo number_format($total_aset, 0, ',', '.'); ?></strong></td>
+              <td><?php echo htmlspecialchars($row['kondisi']); ?></td>
+          </tr>
+          <?php } ?>
           </tbody>
         </table>
       </div>
@@ -117,9 +114,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="kategori">Kategori</label>
             <select id="kategori" name="kategori" required>
               <option value="">-- Pilih kategori --</option>
-              <option value="Elektronik">Elektronik</option>
-              <option value="Furnitur">Furnitur</option>
-              <option value="Alat Lab">Alat Lab</option>
+              <?php
+              // Menampilkan pilihan kategori secara dinamis dari tabel database kategori
+              $query_kat = mysqli_query($koneksi, "SELECT * FROM kategori");
+              while ($kat = mysqli_fetch_assoc($query_kat)) {
+                  echo '<option value="' . $kat['id_kategori'] . '">' . htmlspecialchars($kat['nama_kategori']) . '</option>';
+              }
+              ?>
             </select>
           </div>
 
