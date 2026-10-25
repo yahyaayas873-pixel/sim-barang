@@ -1,4 +1,14 @@
 <?php
+session_start();
+
+// Proteksi halaman: Jika belum login, tendang kembali ke halaman login.php
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
+
+<?php
 include 'koneksi.php';
 
 // Proses simpan data saat form disubmit
@@ -24,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIM-Barang - Inventaris Jurusan</title>
@@ -31,6 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
   <header>
+    <div style="text-align: right; margin-bottom: 20px;">
+    <span>Halo, <b><?= $_SESSION['user'] ?></b></span> | 
+    <a href="logout.php" style="color: red; text-decoration: none; font-weight: bold;">Logout</a>
+</div>
     <h1>SIM-Barang</h1>
     <p>Sistem Pengelolaan Inventaris Barang Jurusan</p>
   </header>
